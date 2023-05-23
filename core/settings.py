@@ -26,10 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework",
     "drf_spectacular",
-
     "users",
 ]
 
@@ -122,9 +120,18 @@ USER_IMAGE_SIZE_MB_LIMIT = 2
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+# Emailing settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_FROM = "noragexbox2@gmail.com"
+EMAIL_HOST_USER = "noragexbox2@gmail.com"
+EMAIL_HOST_PASSWORD = "bfmbiiuroelqcrvn"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Sound Cloud Service',
+    "TITLE": "Sound Cloud Service",
 }

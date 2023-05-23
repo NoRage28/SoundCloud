@@ -5,21 +5,17 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.core.validators import FileExtensionValidator
-from users.services import get_path_upload_user_image, validate_size_image
+from users.services import get_path_upload_avatar, validate_size_image
 
 
 class CustomUserManager(BaseUserManager):
-
     def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError("Email must be provided.")
         if not password:
             raise ValueError("Password must be provided.")
 
-        user = self.model(
-            email=self.normalize_email(email),
-            **extra_fields
-        )
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save()
         return user
@@ -40,11 +36,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     country = models.CharField(max_length=30, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
     about = models.TextField(max_length=2000, blank=True, null=True)
-    user_image = models.ImageField(
-        upload_to=get_path_upload_user_image,
+    avatar = models.ImageField(
+        upload_to=get_path_upload_avatar,
         blank=True,
         null=True,
-        validators=[FileExtensionValidator(allowed_extensions=["jpg"]), validate_size_image]
+        validators=[
+            FileExtensionValidator(allowed_extensions=["jpg"]),
+            validate_size_image,
+        ],
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
