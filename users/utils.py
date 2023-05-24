@@ -11,7 +11,6 @@ from typing import Dict, Any
 
 
 class EmailSender:
-
     @staticmethod
     def send_email(mail_subject: str, message: Dict[str, Any], to_email: str) -> bool:
         email = EmailMessage(subject=mail_subject, body=message, to=[to_email])
@@ -23,12 +22,15 @@ class EmailSender:
         user = User.objects.get(email=data.get("email"))
 
         mail_subject = "Activate your user account"
-        message = render_to_string("template_activate_account.html", {
-            "domain": get_current_site(request).domain,
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-            "token": account_token_generator.make_token(user),
-            "protocol": "https" if request.is_secure() else "http"
-        })
+        message = render_to_string(
+            "template_activate_account.html",
+            {
+                "domain": get_current_site(request).domain,
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": account_token_generator.make_token(user),
+                "protocol": "https" if request.is_secure() else "http",
+            },
+        )
         to_email = data.get("email")
 
         return self.send_email(mail_subject, message, to_email)

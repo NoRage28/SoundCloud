@@ -5,7 +5,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.core.validators import FileExtensionValidator
-from users.services import get_path_upload_avatar, validate_size_image
+from users.services.base_services import get_path_upload_avatar, validate_size_image
 
 
 class CustomUserManager(BaseUserManager):
@@ -31,6 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     Main User Model
     """
+
     email = models.EmailField(max_length=150, unique=True, db_index=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     country = models.CharField(max_length=30, blank=True, null=True)
