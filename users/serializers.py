@@ -37,3 +37,4 @@ class SignInSerializer(serializers.Serializer):
         if not user.check_password(attrs.get("password")):
             raise AuthenticationFailed("You passed a wrong password")
         return attrs
+

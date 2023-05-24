@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 import jwt
 from typing import Optional
+from drf_spectacular.extensions import OpenApiAuthenticationExtension
 
 User = get_user_model()
 
@@ -44,3 +45,10 @@ class CustomBackendAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed("User is inactive")
 
         return user, None
+
+
+class CustomBackendAuthenticationExtension(OpenApiAuthenticationExtension):
+    """Extension for register CustomBackendAuthentication in Swagger documentation"""
+    target_class = CustomBackendAuthentication
+    name = 'custom_backend_authentication'
+    match_subclasses = True
