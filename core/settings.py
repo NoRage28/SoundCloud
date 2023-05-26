@@ -135,13 +135,9 @@ EMAIL_USE_TLS = True
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Sound Cloud Service",
-    'DEFAULT_GENERATOR_CLASS': 'drf_spectacular.generators.SchemaGenerator',
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'users.services.auth_backend.CustomBackendAuthentication',
+    "AUTHENTICATION_EXTENSIONS": [
+        "users.services.auth_backend.CustomAuthenticationScheme",
     ],
-    'EXTENSIONS': [
-        'users.services.auth_backend.CustomBackendAuthenticationExtension',
-    ]
 }
 
 REFRESH_TOKEN_SECRET = os.environ.get("REFRESH_TOKEN_SECRET")

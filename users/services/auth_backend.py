@@ -47,8 +47,14 @@ class CustomBackendAuthentication(authentication.BaseAuthentication):
         return user, None
 
 
-class CustomBackendAuthenticationExtension(OpenApiAuthenticationExtension):
-    """Extension for register CustomBackendAuthentication in Swagger documentation"""
-    target_class = CustomBackendAuthentication
-    name = 'custom_backend_authentication'
-    match_subclasses = True
+class CustomAuthenticationScheme(OpenApiAuthenticationExtension):
+    target_class = "users.services.auth_backend.CustomBackendAuthentication"
+    name = "CustomBackendAuthentication"
+
+    def get_security_definition(self, auto_schema):
+        return {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token <token_value>",
+        }

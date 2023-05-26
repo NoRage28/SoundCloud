@@ -18,9 +18,7 @@ class EmailSender:
             return True
         return False
 
-    def send_activation_email(self, request: Request, data: Dict[str, Any]) -> bool:
-        user = User.objects.get(email=data.get("email"))
-
+    def send_activation_email(self, request: Request, user: User) -> bool:
         mail_subject = "Activate your user account"
         message = render_to_string(
             "template_activate_account.html",
@@ -31,6 +29,21 @@ class EmailSender:
                 "protocol": "https" if request.is_secure() else "http",
             },
         )
-        to_email = data.get("email")
+        to_email = user.email
+
+        return self.send_email(mail_subject, message, to_email)
+
+    def send_reset_password_email(self, request: Request, user: User) -> bool:
+        mail_subject = "Password Reset request"
+        message = render_to_string(
+            "template_reset_password.html",
+            {
+                "domain": get_current_site(request).domain,
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": account_token_generator.make_token(user),
+                "protocol": "https" if request.is_secure() else "http",
+            },
+        )
+        to_email = user.email
 
         return self.send_email(mail_subject, message, to_email)
