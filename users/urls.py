@@ -8,10 +8,14 @@ from users.views import (
     ChangePasswordAPIView,
     ResetPasswordRequestAPIView,
     ResetPasswordConfirmAPIView,
+    SpotifyLoginAPIView,
+    SpotifyAuthAPIView,
 )
 
 urlpatterns = [
     path("sign_up/", UserSignUpAPIView.as_view(), name="sign_up"),
+    path("spotify_login/", SpotifyLoginAPIView.as_view(), name="spotify_login"),
+    path("spotify_callback/", SpotifyAuthAPIView.as_view(), name="spotify_callback"),
     path(
         "activate/<str:uidb64>/<str:token>",
         ActivateAccountAPIView.as_view(),

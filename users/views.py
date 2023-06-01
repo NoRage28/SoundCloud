@@ -1,9 +1,12 @@
+from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from rest_framework import generics, permissions, views, status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiParameter
+from users.services import spotify
+from django.conf import settings
 
 from users.serializers import (
     SignUpSerializer,
@@ -22,6 +25,26 @@ from users.tokens import (
 )
 
 User = get_user_model()
+
+
+class SpotifyLoginAPIView(views.APIView):
+    def get(self, request):
+        return render(request, "oauth/login_spotify.html", {"spotify_client_id": settings.SPOTIFY_CLIENT_ID})
+
+
+class SpotifyAuthAPIView(views.APIView):
+
+    def get(self, request):
+        user = spotify.spotify_auth(request.query_params.get("code"))
+        access_token = generate_access_token(user)
+        refresh_token = generate_refresh_token(user)
+        data = {
+            "user_id": user.id,
+            "user_email": user.email,
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class UserSignUpAPIView(generics.CreateAPIView):
