@@ -4,7 +4,6 @@ from users.endpoints.auth_views import (
     ActivateAccountAPIView,
     SignInAPIView,
     RefreshAccessTokenAPIView,
-    TestView,
     ChangePasswordAPIView,
     ResetPasswordRequestAPIView,
     ResetPasswordConfirmAPIView,
@@ -25,7 +24,6 @@ urlpatterns = [
     path(
         "sign_in/refresh/", RefreshAccessTokenAPIView.as_view(), name="sign_in_refresh"
     ),
-    path("test/", TestView.as_view()),
     path("change_password/", ChangePasswordAPIView.as_view(), name="change_password"),
     path(
         "reset_password_request/",

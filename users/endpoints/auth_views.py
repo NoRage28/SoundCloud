@@ -4,14 +4,13 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from rest_framework import generics, permissions, views, status
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiTypes
 from users.services import spotify
 from django.conf import settings
 
 from users.serializers import (
     SignUpSerializer,
     SignInSerializer,
-    TestSerializer,
     RefreshAccessTokenSerializer,
     ChangePasswordSerializer,
     ResetPasswordRequestSerializer,
@@ -200,9 +199,3 @@ class ResetPasswordConfirmAPIView(generics.UpdateAPIView):
             return Response({"success": True}, status=status.HTTP_200_OK)
         else:
             return Response({"success": False}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class TestView(generics.ListAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = TestSerializer

@@ -43,12 +43,6 @@ class SignInSerializer(serializers.Serializer):
         return attrs
 
 
-class TestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = "__all__"
-
-
 class RefreshAccessTokenSerializer(serializers.Serializer):
     refresh_token = serializers.CharField(
         max_length=255, required=True, write_only=True
