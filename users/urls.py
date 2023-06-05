@@ -3,7 +3,7 @@ from users.views import (
     UserSignUpAPIView,
     ActivateAccountAPIView,
     SignInAPIView,
-    ObtainAccessTokenAPIView,
+    RefreshAccessTokenAPIView,
     TestView,
     ChangePasswordAPIView,
     ResetPasswordRequestAPIView,
@@ -23,7 +23,7 @@ urlpatterns = [
     ),
     path("sign_in/", SignInAPIView.as_view(), name="sign_in"),
     path(
-        "sign_in/refresh/", ObtainAccessTokenAPIView.as_view(), name="sign_in_refresh"
+        "sign_in/refresh/", RefreshAccessTokenAPIView.as_view(), name="sign_in_refresh"
     ),
     path("test/", TestView.as_view()),
     path("change_password/", ChangePasswordAPIView.as_view(), name="change_password"),

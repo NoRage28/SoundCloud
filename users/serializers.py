@@ -49,7 +49,7 @@ class TestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ObtainAccessTokenSerializer(serializers.Serializer):
+class RefreshAccessTokenSerializer(serializers.Serializer):
     refresh_token = serializers.CharField(
         max_length=255, required=True, write_only=True
     )

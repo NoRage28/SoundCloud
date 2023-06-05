@@ -10,16 +10,16 @@ User = get_user_model()
 
 def get_spotify_jwt(code: str) -> Optional[str]:
     url = "https://accounts.spotify.com/api/token"
-    basic_str = f"{settings.SPOTIFY_CLIENT_ID}:{settings.SPOTIFY_SECRET}".encode("ascii")
+    basic_str = f"{settings.SPOTIFY_CLIENT_ID}:{settings.SPOTIFY_SECRET}".encode(
+        "ascii"
+    )
     basic = base64.b64encode(basic_str)
     data = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "http://127.0.0.1:8000/api/auth/spotify_callback"
+        "redirect_uri": "http://127.0.0.1:8000/api/auth/spotify_callback",
     }
-    headers = {
-        "Authorization": f"Basic {basic.decode('ascii')}"
-    }
+    headers = {"Authorization": f"Basic {basic.decode('ascii')}"}
 
     response = requests.post(url, data=data, headers=headers)
     if response.status_code == 200:

@@ -12,7 +12,7 @@ from users.serializers import (
     SignUpSerializer,
     SignInSerializer,
     TestSerializer,
-    ObtainAccessTokenSerializer,
+    RefreshAccessTokenSerializer,
     ChangePasswordSerializer,
     ResetPasswordRequestSerializer,
     ResetPasswordConfirmSerializer,
@@ -29,22 +29,30 @@ User = get_user_model()
 
 class SpotifyLoginAPIView(views.APIView):
     def get(self, request):
-        return render(request, "oauth/login_spotify.html", {"spotify_client_id": settings.SPOTIFY_CLIENT_ID})
+        return render(
+            request,
+            "oauth/login_spotify.html",
+            {"spotify_client_id": settings.SPOTIFY_CLIENT_ID},
+        )
 
 
 class SpotifyAuthAPIView(views.APIView):
-
     def get(self, request):
         user = spotify.spotify_auth(request.query_params.get("code"))
-        access_token = generate_access_token(user)
-        refresh_token = generate_refresh_token(user)
-        data = {
-            "user_id": user.id,
-            "user_email": user.email,
-            "access_token": access_token,
-            "refresh_token": refresh_token,
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+        if user:
+            access_token = generate_access_token(user)
+            refresh_token = generate_refresh_token(user)
+            data = {
+                "user_id": user.id,
+                "user_email": user.email,
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "Something went wrong. Please try again"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class UserSignUpAPIView(generics.CreateAPIView):
@@ -112,23 +120,22 @@ class SignInAPIView(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data.get("user")
-            access_token = generate_access_token(user)
-            refresh_token = generate_refresh_token(user)
-            data = {
-                "user_id": user.id,
-                "user_email": user.email,
-                "access_token": access_token,
-                "refresh_token": refresh_token,
-            }
-            return Response(data=data, status=status.HTTP_200_OK)
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data.get("user")
+        access_token = generate_access_token(user)
+        refresh_token = generate_refresh_token(user)
+        data = {
+            "user_id": user.id,
+            "user_email": user.email,
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
-class ObtainAccessTokenAPIView(generics.CreateAPIView):
+class RefreshAccessTokenAPIView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = ObtainAccessTokenSerializer
+    serializer_class = RefreshAccessTokenSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
