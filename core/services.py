@@ -7,6 +7,18 @@ def get_path_upload_avatar(instance, file: str) -> str:
     return os.path.join("media", "avatars", str(instance.pk), file)
 
 
+def get_path_upload_album_cover(instance, file: str) -> str:
+    return os.path.join("media", "albums", str(instance.pk), file)
+
+
+def get_path_upload_track(instance, file: str) -> str:
+    return os.path.join("media", "tracks", str(instance.pk), file)
+
+
+def get_path_upload_playlist_cover(instance, file: str) -> str:
+    return os.path.join("media", "playlists", str(instance.pk), file)
+
+
 def validate_size_image(file_obj):
     if file_obj.size > USER_IMAGE_SIZE_MB_LIMIT * 1024 * 1024:
         raise ValidationError(
