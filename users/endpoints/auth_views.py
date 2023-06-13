@@ -4,11 +4,11 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from rest_framework import generics, permissions, views, status
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from users.services import spotify
 from django.conf import settings
 
-from users.serializers import (
+from users.serializers.auth_serializers import (
     SignUpSerializer,
     SignInSerializer,
     RefreshAccessTokenSerializer,

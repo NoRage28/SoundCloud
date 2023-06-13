@@ -61,3 +61,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Follower(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
+    subscriber = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="subscribers"
+    )
+
+    def __str__(self):
+        return f"{self.subscriber} subscribed to {self.user}"
+
+
+class SocialLink(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="social_links"
+    )
+    link = models.URLField(max_length=255)
+
+    def __str__(self):
+        return f"{self.user} is owner for {self.link}"
