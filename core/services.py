@@ -8,15 +8,15 @@ def get_path_upload_avatar(instance, file: str) -> str:
 
 
 def get_path_upload_album_cover(instance, file: str) -> str:
-    return os.path.join("media", "albums", str(instance.pk), file)
+    return os.path.join("media", "albums", str(instance.user.pk), file)
 
 
 def get_path_upload_track(instance, file: str) -> str:
-    return os.path.join("media", "tracks", str(instance.pk), file)
+    return os.path.join("media", "tracks", str(instance.user.pk), file)
 
 
 def get_path_upload_playlist_cover(instance, file: str) -> str:
-    return os.path.join("media", "playlists", str(instance.pk), file)
+    return os.path.join("media", "playlists", str(instance.user.pk), file)
 
 
 def validate_size_image(file_obj):
@@ -24,3 +24,7 @@ def validate_size_image(file_obj):
         raise ValidationError(
             f"Your file shouldn't be more than {USER_IMAGE_SIZE_MB_LIMIT}MB"
         )
+
+def delete_old_file(path_file):
+    if os.path.exists(path_file):
+        os.remove(path_file)

@@ -5,7 +5,7 @@ from users.serializers.base_serializers import (
     SocialLinkSerializer,
 )
 from users.models import User
-from users.permissions import IsAuthor
+from core.permissions import IsAuthor
 
 
 class UserAPIView(viewsets.ModelViewSet):

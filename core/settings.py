@@ -139,6 +139,7 @@ SPECTACULAR_SETTINGS = {
     "AUTHENTICATION_EXTENSIONS": [
         "users.services.auth_backend.CustomAuthenticationScheme",
     ],
+    'COMPONENT_SPLIT_REQUEST': True
 }
 
 REFRESH_TOKEN_SECRET = os.environ.get("REFRESH_TOKEN_SECRET")
