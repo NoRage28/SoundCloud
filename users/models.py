@@ -5,7 +5,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.core.validators import FileExtensionValidator
-from users.services.base_services import get_path_upload_avatar, validate_size_image
+from core.services import get_path_upload_avatar, validate_size_image
 
 
 class CustomUserManager(BaseUserManager):
