@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
+    "django_filters",
     "users",
     "audio_library",
 ]
@@ -107,6 +108,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -123,6 +125,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "users.services.auth_backend.CustomBackendAuthentication",
     ),
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 # Emailing settings
@@ -139,7 +142,7 @@ SPECTACULAR_SETTINGS = {
     "AUTHENTICATION_EXTENSIONS": [
         "users.services.auth_backend.CustomAuthenticationScheme",
     ],
-    'COMPONENT_SPLIT_REQUEST': True
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 REFRESH_TOKEN_SECRET = os.environ.get("REFRESH_TOKEN_SECRET")

@@ -6,6 +6,7 @@ from core.services import (
     get_path_upload_album_cover,
     get_path_upload_track,
     get_path_upload_playlist_cover,
+    get_path_upload_track_cover,
 )
 
 
@@ -46,12 +47,20 @@ class Track(models.Model):
     genre = models.ManyToManyField(Genre, related_name="tracks_genre")
     album = models.ForeignKey(Album, on_delete=models.SET_NULL, blank=True, null=True)
     authors_link = models.CharField(max_length=300, blank=True, null=True)
+    private = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     auditions = models.PositiveIntegerField(default=0)
     downloads = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
-    user_like = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="liked_tracks"
+    user_like = models.ManyToManyField(User, related_name="liked_tracks")
+    cover = models.ImageField(
+        upload_to=get_path_upload_track_cover,
+        blank=True,
+        null=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=["jpg"]),
+            validate_size_image,
+        ],
     )
     file = models.FileField(
         upload_to=get_path_upload_track,

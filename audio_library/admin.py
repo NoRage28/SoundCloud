@@ -46,8 +46,8 @@ class TrackAdmin(admin.ModelAdmin):
         "created_at",
     )
     search_fields = (
-        "user",
-        "genre__name",
+        "user__email",
+        "user__username" "genre__name",
     )
 
 
@@ -69,4 +69,4 @@ class PlayListAdmin(admin.ModelAdmin):
         "title",
     )
     list_display_links = ("user",)
-    search_fields = ("user", "track__title")
+    search_fields = ("user__email", "user__username", "track__title")
