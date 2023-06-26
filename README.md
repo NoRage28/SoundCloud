@@ -88,5 +88,9 @@ SoundCloud project is a project that allows you to upload, find, listen, and dow
 
 `python manage.py runserver`
 
+8) For comfortable work use documentation to the link below:
+
+`http://localhost/api/schema/docs/`
+
 ## Possible improvements
 * Add front end
