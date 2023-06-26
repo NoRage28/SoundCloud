@@ -4,7 +4,7 @@ from rest_framework import generics, viewsets, parsers, views, status
 from rest_framework.response import Response
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
-from django.http import FileResponse
+from django.http import HttpResponse
 
 from audio_library.models import Genre, License, Album, Track, PlayList, Comment
 from audio_library.serializers import (
@@ -128,7 +128,7 @@ class StreamingTrackAPIView(views.APIView):
 
     def get(self, request, pk):
         try:
-            self.track = Track.objects.get(pk=pk)
+            self.track = Track.objects.get(pk=pk, private=False)
         except:
             return Response(
                 {"track": "Such track doesn't exist"}, status=status.HTTP_404_NOT_FOUND
@@ -136,9 +136,9 @@ class StreamingTrackAPIView(views.APIView):
 
         if self.track.file and os.path.exists(self.track.file.path):
             self.add_audition()
-            return FileResponse(
-                open(self.track.file.path, "rb"), filename=self.track.file.name
-            )
+            response = HttpResponse('', content_type="audio/mpeg", status=206)
+            response['X-Accel-Redirect'] = f"/mp3/{self.track.file.name}"
+            return response
         else:
             return Response(
                 {"track": "File with this track doesn't exist or removed"},
@@ -161,11 +161,10 @@ class DownloadTrackAPIView(views.APIView):
 
         if self.track.file and os.path.exists(self.track.file.path):
             self.add_download()
-            return FileResponse(
-                open(self.track.file.path, "rb"),
-                filename=self.track.file.name,
-                as_attachment=True,
-            )
+            response = HttpResponse('', content_type="audio/mpeg", status=206)
+            response["Content-Disposition"] = f"attachment; filename={self.track.file.name}"
+            response['X-Accel-Redirect'] = f"/media/{self.track.file.name}"
+            return response
         else:
             return Response(
                 {"track": "File with this track doesn't exist or removed"},
